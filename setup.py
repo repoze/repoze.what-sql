@@ -27,7 +27,7 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 
-setup(name='repoze.what SQL plugin',
+setup(name='repoze.what.plugins.sql',
       version=__version__,
       description=('The SQL plugin for repoze.what'),
       long_description=README,
