@@ -17,7 +17,7 @@
 
 import unittest
 
-from repoze.what.quickstart import SQLAuthenticatorPlugin
+from repoze.what.plugins.quickstart import SQLAuthenticatorPlugin
 from repoze.what.plugins.sql import SqlGroupsAdapter, \
                                             SqlPermissionsAdapter, \
                                             configure_sql_adapters
