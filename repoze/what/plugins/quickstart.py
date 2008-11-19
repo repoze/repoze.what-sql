@@ -140,7 +140,6 @@ def setup_sql_auth(app, config, user_class, group_class, permission_class,
     
     middleware = setup_auth(
         app,
-        config,
         group_adapters,
         permission_adapters,
         authenticators,
