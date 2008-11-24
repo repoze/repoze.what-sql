@@ -95,7 +95,7 @@ def find_plugin_translations(translations={}):
     return final_translations
 
 
-def setup_sql_auth(app, config, user_class, group_class, permission_class,
+def setup_sql_auth(app, user_class, group_class, permission_class,
                    session, form_plugin=None, form_identifies=True,
                    identifiers=None, authenticators=[], challengers=[],
                    mdproviders=[], translations={}):
@@ -104,7 +104,6 @@ def setup_sql_auth(app, config, user_class, group_class, permission_class,
     authentication/authorization.
     
     @param app: The WSGI application object.
-    @param config: The Pylons config object.
     @param user_class: The SQLAlchemy class for the users.
     @param group_class: The SQLAlchemy class for the groups.
     @param permission_class: The SQLAlchemy class for the permissions.
