@@ -15,8 +15,6 @@
 #
 ##############################################################################
 
-__version__ = '1.0a1'
-
 import os
 
 from ez_setup import use_setuptools
@@ -26,19 +24,16 @@ from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
+version = open(os.path.join(here, 'VERSION.txt')).readline().rstrip()
 
 setup(name='repoze.what.plugins.sql',
-      version=__version__,
-      description=('The SQL plugin for repoze.what'),
+      version=version,
+      description=('The repoze.what SQL plugin'),
       long_description=README,
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Programming Language :: Python",
-        "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-        "Topic :: Internet :: WWW/HTTP :: WSGI",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         ],
       keywords='web application server wsgi sql',
       author="Gustavo Narea",
@@ -51,10 +46,10 @@ setup(name='repoze.what.plugins.sql',
       zip_safe=False,
       tests_require=['repoze.what'],
       install_requires=[
-          'repoze.what >= 0.9a2-dev',
+          'repoze.what >= 1.0b1',
           'sqlalchemy >= 0.5.0rc4',
           'zope.interface'],
-      test_suite="tests",
+      test_suite="nose.collector",
       entry_points = """\
       """
       )
