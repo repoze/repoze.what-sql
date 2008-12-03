@@ -13,7 +13,7 @@
 #
 ##############################################################################
 
-"""Test suite for the SQL plugin."""
+"""Test suite for the adapters provided by the  SQL plugin."""
 
 import unittest
 

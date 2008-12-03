@@ -23,8 +23,7 @@ from cStringIO import StringIO
 from cgi import FieldStorage
 import elixir
 
-from fixture.model_elixir import init_model, DBSession, metadata, Permission, \
-                                 Group, User
+from model import init_model, DBSession, metadata, Permission, Group, User
 
 engine = create_engine(os.environ.get('DBURL', 'sqlite://'))
 

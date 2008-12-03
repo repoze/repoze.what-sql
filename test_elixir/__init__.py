@@ -24,15 +24,15 @@ from repoze.what.plugins.sql import SqlGroupsAdapter, \
 from repoze.what.adapters.testutil import GroupsAdapterTester, \
                                                   PermissionsAdapterTester
 
-import databasesetup_elixir
-from fixture.model_elixir import User, Group, Permission, DBSession
+import databasesetup
+from model import User, Group, Permission, DBSession
 
 
 class _BaseSqlAdapterTester(unittest.TestCase):
     """Base class for the test suite of the SQL source adapters"""
     
     def tearDown(self):
-        databasesetup_elixir.teardownDatabase()
+        databasesetup.teardownDatabase()
 
 
 class TestSqlGroupsAdapter(GroupsAdapterTester, _BaseSqlAdapterTester):
@@ -40,10 +40,10 @@ class TestSqlGroupsAdapter(GroupsAdapterTester, _BaseSqlAdapterTester):
     
     def setUp(self):
         super(TestSqlGroupsAdapter, self).setUp()
-        databasesetup_elixir.setup_database()
-        self.adapter = SqlGroupsAdapter(databasesetup_elixir.Group,
-                                        databasesetup_elixir.User,
-                                        databasesetup_elixir.DBSession)
+        databasesetup.setup_database()
+        self.adapter = SqlGroupsAdapter(databasesetup.Group,
+                                        databasesetup.User,
+                                        databasesetup.DBSession)
 
 
 class TestSqlPermissionsAdapter(PermissionsAdapterTester,
@@ -52,10 +52,10 @@ class TestSqlPermissionsAdapter(PermissionsAdapterTester,
     
     def setUp(self):
         super(TestSqlPermissionsAdapter, self).setUp()
-        databasesetup_elixir.setup_database()
-        self.adapter = SqlPermissionsAdapter(databasesetup_elixir.Permission,
-                                             databasesetup_elixir.Group,
-                                             databasesetup_elixir.DBSession)
+        databasesetup.setup_database()
+        self.adapter = SqlPermissionsAdapter(databasesetup.Permission,
+                                             databasesetup.Group,
+                                             databasesetup.DBSession)
 
 
 class TestAdaptersConfigurator(unittest.TestCase):
