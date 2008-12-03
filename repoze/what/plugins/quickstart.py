@@ -19,6 +19,7 @@
 
 from zope.interface import implements
 from repoze.who.interfaces import IAuthenticator
+from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from repoze.what.middleware import setup_auth

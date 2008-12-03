@@ -16,7 +16,6 @@
 """Stuff required to setup the test database."""
 
 import os
-import sha
 
 from sqlalchemy import *
 from sqlalchemy.orm import *
