@@ -116,6 +116,8 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
         login form.
     @param form_identifies: Whether the C{form_plugin} may and should act as
         an repoze.who identifier.
+    @param cookie_secret: The "secret" for the AuthTktCookiePlugin.
+    @param cookie_name: The name for the AuthTktCookiePlugin.
     @param translations: The translation dictionary for the model.
     @return: The WSGI application with authentication and authorization.
     
