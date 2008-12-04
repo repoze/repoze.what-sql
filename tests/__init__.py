@@ -15,4 +15,4 @@
 #
 ##############################################################################
 
-"""Test suite for repoze.what."""
+"""Test suite for the repoze.what SQL plugin."""

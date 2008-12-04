@@ -98,11 +98,14 @@ def find_plugin_translations(translations={}):
 
 def setup_sql_auth(app, user_class, group_class, permission_class,
                    session, form_plugin=None, form_identifies=True,
-                   identifiers=None, authenticators=[], challengers=[],
-                   mdproviders=[], translations={}):
+                   cookie_secret='secret', cookie_name='authtkt',
+                   translations={}, **who_args):
     """
     A basic configuration of repoze.who and repoze.what with SQL-only
     authentication/authorization.
+    
+    Additional keyword arguments will be passed to repoze.who's
+    PluggableAuthenticationMiddleware.
     
     @param app: The WSGI application object.
     @param user_class: The SQLAlchemy class for the users.
@@ -113,12 +116,8 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
         login form.
     @param form_identifies: Whether the C{form_plugin} may and should act as
         an repoze.who identifier.
-    @param identifiers: Secondary repoze.who identifier plugins, if any.
-    @param authenticators: The repoze.who authenticators to be used.
-    @param challengers: Secondary repoze.who challenger plugins, if any.
-    @param mdproviders: Secondary repoze.who metadata plugins, if any.
-    @param translations: The TG2 applications' base_config.sa_auth.translations
-    @return: The TG2 application with authentication and authorization.
+    @param translations: The translation dictionary for the model.
+    @return: The WSGI application with authentication and authorization.
     
     """
     plugin_translations = find_plugin_translations(translations)
@@ -134,19 +133,36 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     group_adapters = {'sql_auth': source_adapters['group']}
     permission_adapters = {'sql_auth': source_adapters['permission']}
     
+    # Setting the repoze.who authenticators:
     sqlauth = SQLAuthenticatorPlugin(user_class, session)
     sqlauth.translations.update(plugin_translations['authenticator'])
-    authenticators.insert(0, ('sqlauth', sqlauth))
+    if 'authenticators' not in who_args:
+        who_args['authenticators'] = []
+    who_args['authenticators'].append(('sqlauth', sqlauth))
     
-    middleware = setup_auth(
-        app,
-        group_adapters,
-        permission_adapters,
-        authenticators,
-        form_plugin,
-        form_identifies,
-        identifiers,
-        challengers,
-        mdproviders
-        )
+    cookie = AuthTktCookiePlugin(cookie_secret, cookie_name)
+    
+    # Setting the repoze.who identifiers
+    if 'identifiers' not in who_args:
+        who_args['identifiers'] = []
+    who_args['identifiers'].append(('cookie', cookie))
+    
+    if form_plugin is None:
+        from repoze.who.plugins.form import RedirectingFormPlugin
+        form = RedirectingFormPlugin('/login', '/login_handler',
+                                     '/logout_handler',
+                                     rememberer_name='cookie')
+    else:
+        form = form_plugin
+    
+    if form_identifies:
+        who_args['identifiers'].insert(0, ('main_identifier', form))
+    
+    # Setting the repoze.who challengers:
+    if 'challengers' not in who_args:
+        who_args['challengers'] = []
+    who_args['challengers'].append(('form', form))
+    
+    middleware = setup_auth(app, group_adapters, permission_adapters, 
+                            **who_args)
     return middleware
