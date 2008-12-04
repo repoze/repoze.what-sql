@@ -46,7 +46,7 @@ setup(name='repoze.what.plugins.sql',
       zip_safe=False,
       tests_require=['repoze.what', 'coverage', 'nose'],
       install_requires=[
-          'repoze.what >= 1.0b1',
+          'repoze.what >= 1.0b2',
           'sqlalchemy >= 0.5.0rc4',
           'zope.interface'],
       test_suite="nose.collector",
