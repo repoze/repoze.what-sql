@@ -72,24 +72,24 @@ __all__ = ['SqlGroupsAdapter', 'SqlPermissionsAdapter',
 class _BaseSqlAdapter(BaseSourceAdapter):
     """Base class for SQL source adapters."""
 
-    def __init__(self, parent_class, children_class, session):
+    def __init__(self, parent_class, children_class, dbsession):
         """
         Create an SQL source adapter.
 
         @param parent_class: The SQLAlchemy table of the section.
         @param children_class: The SQLAlchemy table of the items.
-        @param session: The SQLAlchemy session.
+        @param dbsession: The SQLAlchemy session.
 
         """
         super(_BaseSqlAdapter, self).__init__()
-        self.session = session
+        self.dbsession = dbsession
         self.parent_class = parent_class
         self.children_class = children_class
 
     # BaseSourceAdapter
     def _get_all_sections(self):
         sections = {}
-        sections_as_rows = self.session.query(self.parent_class).all()
+        sections_as_rows = self.dbsession.query(self.parent_class).all()
         for section_as_row in sections_as_rows:
             section_name = getattr(section_as_row,
                                    self.translations['section_name'])
@@ -114,28 +114,28 @@ class _BaseSqlAdapter(BaseSourceAdapter):
 
     # BaseSourceAdapter
     def _include_items(self, section, items):
-        self.session.begin(subtransactions=True)
+        self.dbsession.begin(subtransactions=True)
         item, included_items = self._get_items_as_rowset(section)
         try:
             for item_to_include in items:
                 item_as_row = self._get_item_as_row(item_to_include)
                 included_items.append(item_as_row)
-            self.session.commit()
+            self.dbsession.commit()
         except SQLAlchemyError, msg:
-            self.session.rollback()
+            self.dbsession.rollback()
             raise SourceError(msg)
 
     # BaseSourceAdapter
     def _exclude_items(self, section, items):
-        self.session.begin(subtransactions=True)
+        self.dbsession.begin(subtransactions=True)
         item, included_items = self._get_items_as_rowset(section)
         try:
             for item_to_exclude in items:
                 item_as_row = self._get_item_as_row(item_to_exclude)
                 included_items.remove(item_as_row)
-            self.session.commit()
+            self.dbsession.commit()
         except SQLAlchemyError, msg:
-            self.session.rollback()
+            self.dbsession.rollback()
             raise SourceError(msg)
 
     # BaseSourceAdapter
@@ -144,38 +144,38 @@ class _BaseSqlAdapter(BaseSourceAdapter):
 
     # BaseSourceAdapter
     def _create_section(self, section):
-        self.session.begin(subtransactions=True)
+        self.dbsession.begin(subtransactions=True)
         section_as_row = self.parent_class()
         # Creating the section with an empty set of items:
         setattr(section_as_row, self.translations['section_name'], section)
         setattr(section_as_row, self.translations['items'], [])
         try:
-            self.session.add(section_as_row)
-            self.session.commit()
+            self.dbsession.add(section_as_row)
+            self.dbsession.commit()
         except SQLAlchemyError, msg:
-            self.session.rollback()
+            self.dbsession.rollback()
             raise SourceError(msg)
 
     # BaseSourceAdapter
     def _edit_section(self, section, new_section):
-        self.session.begin(subtransactions=True)
+        self.dbsession.begin(subtransactions=True)
         section_as_row = self._get_section_as_row(section)
         setattr(section_as_row, self.translations['section_name'], new_section)
         try:
-            self.session.commit()
+            self.dbsession.commit()
         except SQLAlchemyError, msg:
-            self.session.rollback()
+            self.dbsession.rollback()
             raise SourceError(msg)
 
     # BaseSourceAdapter
     def _delete_section(self, section):
-        self.session.begin(subtransactions=True)
+        self.dbsession.begin(subtransactions=True)
         section_as_row = self._get_section_as_row(section)
         try:
-            self.session.delete(section_as_row)
-            self.session.commit()
+            self.dbsession.delete(section_as_row)
+            self.dbsession.commit()
         except SQLAlchemyError, msg:
-            self.session.rollback()
+            self.dbsession.rollback()
             raise SourceError(msg)
 
     # BaseSourceAdapter
@@ -198,7 +198,7 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         # "field" usually equals to {tg_package}.model.Group.group_name
         # or {tg_package}.model.Permission.permission_name
         field = getattr(self.parent_class, self.translations['section_name'])
-        query = self.session.query(self.parent_class)
+        query = self.dbsession.query(self.parent_class)
         try:
             section_as_row = query.filter(field==section_name).one()
         except NoResultFound:
@@ -218,7 +218,7 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         # "field" usually equals to {tg_package}.model.User.user_name
         # or {tg_package}.model.Group.group_name
         field = getattr(self.children_class, self.translations['item_name'])
-        query = self.session.query(self.children_class)
+        query = self.dbsession.query(self.children_class)
         try:
             item_as_row = query.filter(field==item_name).one()
         except NoResultFound:

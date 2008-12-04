@@ -28,9 +28,9 @@ from repoze.what.plugins.sql import configure_sql_adapters
 class SQLAuthenticatorPlugin(object):
     implements(IAuthenticator)
     
-    def __init__(self, user_class, session):
+    def __init__(self, user_class, dbsession):
         self.user_class = user_class
-        self.session = session
+        self.dbsession = dbsession
         self.translations = {
             'user_name': 'user_name',
             'validate_password': 'validate_password'
@@ -41,7 +41,7 @@ class SQLAuthenticatorPlugin(object):
         if not 'login' in identity:
             return None
         
-        query = self.session.query(self.user_class)
+        query = self.dbsession.query(self.user_class)
         query = query.filter(self.user_class.user_name==identity['login'])
         try:
             user = query.one()
@@ -97,7 +97,7 @@ def find_plugin_translations(translations={}):
 
 
 def setup_sql_auth(app, user_class, group_class, permission_class,
-                   session, form_plugin=None, form_identifies=True,
+                   dbsession, form_plugin=None, form_identifies=True,
                    cookie_secret='secret', cookie_name='authtkt',
                    translations={}, **who_args):
     """
@@ -111,7 +111,7 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     @param user_class: The SQLAlchemy class for the users.
     @param group_class: The SQLAlchemy class for the groups.
     @param permission_class: The SQLAlchemy class for the permissions.
-    @param session: The SQLAlchemy session.
+    @param dbsession: The SQLAlchemy session.
     @param form_plugin: The main repoze.who IChallenger; this is usually a
         login form.
     @param form_identifies: Whether the C{form_plugin} may and should act as
@@ -128,7 +128,7 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
         user_class,
         group_class,
         permission_class,
-        session,
+        dbsession,
         plugin_translations['group_adapter'],
         plugin_translations['permission_adapter']
         )
@@ -136,7 +136,7 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     permission_adapters = {'sql_auth': source_adapters['permission']}
     
     # Setting the repoze.who authenticators:
-    sqlauth = SQLAuthenticatorPlugin(user_class, session)
+    sqlauth = SQLAuthenticatorPlugin(user_class, dbsession)
     sqlauth.translations.update(plugin_translations['authenticator'])
     if 'authenticators' not in who_args:
         who_args['authenticators'] = []

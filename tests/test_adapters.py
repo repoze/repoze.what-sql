@@ -67,8 +67,8 @@ class TestAdaptersConfigurator(unittest.TestCase):
         permission_adapter = adapters['permission']
         assert isinstance(group_adapter, SqlGroupsAdapter)
         assert isinstance(permission_adapter, SqlPermissionsAdapter)
-        self.assertEquals(DBSession, group_adapter.session,
-                          permission_adapter.session)
+        self.assertEquals(DBSession, group_adapter.dbsession,
+                          permission_adapter.dbsession)
         self.assertEqual(User, group_adapter.children_class)
         self.assertEquals(Group, group_adapter.parent_class,
                           permission_adapter.children_class)
