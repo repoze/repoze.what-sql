@@ -44,11 +44,18 @@ setup(name='repoze.what.plugins.sql',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      tests_require=['repoze.what', 'coverage', 'nose'],
+      tests_require=[
+          'repoze.what',
+          'coverage',
+          'nose',
+          'repoze.who.plugins.sa',
+          ],
       install_requires=[
           'repoze.what >= 1.0b2',
           'sqlalchemy >= 0.5.0rc4',
-          'zope.interface'],
+          'zope.interface',
+          'repoze.who.plugins.sa',
+          ],
       test_suite="nose.collector",
       entry_points = """\
       """

@@ -23,11 +23,11 @@ import unittest
 from repoze.who.plugins.basicauth import BasicAuthPlugin
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from repoze.who.plugins.form import RedirectingFormPlugin
+from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
 from repoze.who.tests import Base as BasePluginTester, DummyApp
 
 from repoze.what.middleware import AuthorizationMetadata
-from repoze.what.plugins.quickstart import setup_sql_auth, \
-                                           SQLAuthenticatorPlugin
+from repoze.what.plugins.quickstart import setup_sql_auth
 
 import databasesetup
 from fixture.model import User, Group, Permission, DBSession
@@ -62,7 +62,7 @@ class TestSetupAuth(BasePluginTester):
         self._in_registry(app, 'main_identifier', RedirectingFormPlugin)
         self._in_registry(app, 'authorization_md', AuthorizationMetadata)
         self._in_registry(app, 'cookie', AuthTktCookiePlugin)
-        self._in_registry(app, 'sqlauth', SQLAuthenticatorPlugin)
+        self._in_registry(app, 'sqlauth', SQLAlchemyAuthenticatorPlugin)
         self._in_registry(app, 'form', RedirectingFormPlugin)
     
     def test_form_doesnt_identify(self):

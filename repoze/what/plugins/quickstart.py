@@ -17,40 +17,11 @@
 
 """Sample plugins and middleware configuration for repoze.what."""
 
-from zope.interface import implements
-from repoze.who.interfaces import IAuthenticator
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
 
 from repoze.what.middleware import setup_auth
 from repoze.what.plugins.sql import configure_sql_adapters
-
-class SQLAuthenticatorPlugin(object):
-    implements(IAuthenticator)
-    
-    def __init__(self, user_class, dbsession):
-        self.user_class = user_class
-        self.dbsession = dbsession
-        self.translations = {
-            'user_name': 'user_name',
-            'validate_password': 'validate_password'
-        }
-
-    # IAuthenticator
-    def authenticate(self, environ, identity):
-        if not 'login' in identity:
-            return None
-        
-        query = self.dbsession.query(self.user_class)
-        query = query.filter(self.user_class.user_name==identity['login'])
-        try:
-            user = query.one()
-            if user.validate_password(identity['password']):
-                return user.user_name
-        except (NoResultFound, MultipleResultsFound):
-            # As recommended in the docs for repoze.who, it's important to
-            # verify that there's only one matching userid.
-            return
 
 
 def find_plugin_translations(translations={}):
@@ -136,7 +107,7 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     permission_adapters = {'sql_auth': source_adapters['permission']}
     
     # Setting the repoze.who authenticators:
-    sqlauth = SQLAuthenticatorPlugin(user_class, dbsession)
+    sqlauth = SQLAlchemyAuthenticatorPlugin(user_class, dbsession)
     sqlauth.translations.update(plugin_translations['authenticator'])
     if 'authenticators' not in who_args:
         who_args['authenticators'] = []
