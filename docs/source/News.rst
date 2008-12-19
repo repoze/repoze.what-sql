@@ -12,6 +12,9 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 * Moved the :class:`repoze.what.plugins.quickstart.SQLAuthenticatorPlugin`
   authenticator into a new, :mod:`repoze.what`-independent project:
   :mod:`repoze.who.plugins.sa`.
+* :class:`repoze.what.plugins.sql.adapters.SqlGroupsAdapter` ignored
+  translations while retrieving the groups to which the authenticated user
+  belongs (`TurboGears Ticket #2094 <http://trac.turbogears.org/ticket/2094>`_).
 
 
 .. _repoze.what-sql-1.0a2:

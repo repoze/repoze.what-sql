@@ -333,7 +333,8 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
         identity['user'] = user
 
         user_memberships = getattr(user, self.translations['sections'])
-        return set([group.group_name for group in user_memberships])
+        return set([getattr(group, self.translations['section_name'])
+                    for group in user_memberships])
 
 
 class SqlPermissionsAdapter(_BaseSqlAdapter):
