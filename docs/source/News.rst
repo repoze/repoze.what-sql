@@ -15,6 +15,8 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 * :class:`repoze.what.plugins.sql.adapters.SqlGroupsAdapter` ignored
   translations while retrieving the groups to which the authenticated user
   belongs (`TurboGears Ticket #2094 <http://trac.turbogears.org/ticket/2094>`_).
+* The documentation for this plugin has been updated and is now hosted at
+  http://code.gustavonarea.net/repoze.what.plugins.sql/
 
 
 .. _repoze.what-sql-1.0a2:
