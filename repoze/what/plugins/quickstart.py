@@ -72,25 +72,71 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
                    cookie_secret='secret', cookie_name='authtkt',
                    translations={}, **who_args):
     """
-    A basic configuration of repoze.who and repoze.what with SQL-only
-    authentication/authorization.
+    Configure :mod:`repoze.who` and :mod:`repoze.what` with SQL-only 
+    authentication and authorization, respectively.
     
-    Additional keyword arguments will be passed to repoze.who's
-    PluggableAuthenticationMiddleware.
+    :param app: Your WSGI application.
+    :param user_class: The SQLAlchemy/Elixir class for the users.
+    :param group_class: The SQLAlchemy/Elixir class for the groups.
+    :param permission_class: The SQLAlchemy/Elixir class for the permissions.
+    :param dbsession: The SQLAlchemy/Elixir session.
+    :param form_plugin: The main :mod:`repoze.who` challenger plugin; this is 
+        usually a login form.
+    :param form_identifies: Whether the ``form_plugin`` may and should act as
+        an :mod:`repoze.who` identifier.
+    :type form_identifies: bool
+    :param cookie_secret: The "secret" for the AuthTktCookiePlugin.
+    :type cookie_secret: str
+    :param cookie_name: The name for the AuthTktCookiePlugin.
+    :type cookie_name: str
+    :param translations: The model translations.
+    :return: The WSGI application with authentication and authorization
+        middleware.
     
-    @param app: The WSGI application object.
-    @param user_class: The SQLAlchemy class for the users.
-    @param group_class: The SQLAlchemy class for the groups.
-    @param permission_class: The SQLAlchemy class for the permissions.
-    @param dbsession: The SQLAlchemy session.
-    @param form_plugin: The main repoze.who IChallenger; this is usually a
-        login form.
-    @param form_identifies: Whether the C{form_plugin} may and should act as
-        an repoze.who identifier.
-    @param cookie_secret: The "secret" for the AuthTktCookiePlugin.
-    @param cookie_name: The name for the AuthTktCookiePlugin.
-    @param translations: The translation dictionary for the model.
-    @return: The WSGI application with authentication and authorization.
+    It configures :mod:`repoze.who` with the following plugins:
+    
+    * Identifiers:
+    
+      * :class:`repoze.who.plugins.auth_tkt.AuthTktCookiePlugin`. You can
+        customize the cookie name and secret using the ``cookie_name`` and
+        ``cookie_secret`` arguments, respectively.
+      * :class:`repoze.who.plugins.form.RedirectingFormPlugin` as the first
+        identifier and challenger -- using ``/login`` as the relative URL that 
+        will \display the login form, ``/login_handler`` as the relative URL 
+        where the form will be sent and ``/logout_handler`` as the relative URL
+        where the user will be logged out. The so-called *rememberer* of such 
+        identifier will be an instance of 
+        :class:`repoze.who.plugins.auth_tkt.AuthTktCookiePlugin`.
+        
+        .. tip::
+        
+            This plugin may be overriden with the ``form_plugin`` argument. See
+            also the ``form_identifies`` argument.
+      
+      Then it will append the identifiers you pass through the ``identifiers``
+      keyword argument, if any.
+    
+    * Authenticators:
+    
+      * :class:`repoze.who.plugins.sa.SQLAlchemyAuthenticatorPlugin`, using
+        the ``user_class`` and ``dbsession`` arguments as its user class and
+        DB session, respectively.
+      
+      Then it will append the authenticators you pass through the 
+      ``authenticators`` keyword argument, if any.
+    
+    * Challengers:
+    
+      * The same Form-based plugin used in the identifiers.
+      
+      Then it will append the challengers you pass through the 
+      ``challengers`` keyword argument, if any.
+    
+    * Metadata providers: The metadata providers you pass through the 
+      ``mdproviders`` keyword argument, if any.
+    
+    Additional keyword arguments will be passed to 
+    :class:`repoze.who.middleware.PluggableAuthenticationMiddleware`.
     
     """
     plugin_translations = find_plugin_translations(translations)
