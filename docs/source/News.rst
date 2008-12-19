@@ -7,8 +7,9 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 .. _repoze.what-sql-1.0a3:
 
-:mod:`repoze.what.plugins.sql` 1.0a3 (*unreleased*)
-===================================================
+:mod:`repoze.what.plugins.sql` 1.0a3 (2008-12-19)
+=================================================
+
 * Moved the :class:`repoze.what.plugins.quickstart.SQLAuthenticatorPlugin`
   authenticator into a new, :mod:`repoze.what`-independent project:
   :mod:`repoze.who.plugins.sa`.
