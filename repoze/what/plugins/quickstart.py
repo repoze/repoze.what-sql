@@ -70,7 +70,8 @@ def find_plugin_translations(translations={}):
 def setup_sql_auth(app, user_class, group_class, permission_class,
                    dbsession, form_plugin=None, form_identifies=True,
                    cookie_secret='secret', cookie_name='authtkt',
-                   translations={}, **who_args):
+                   login_url='/login', login_handler='/login_handler',
+                   logout_handler='/logout', translations={}, **who_args):
     """
     Configure :mod:`repoze.who` and :mod:`repoze.what` with SQL-only 
     authentication and authorization, respectively.
@@ -89,6 +90,12 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     :type cookie_secret: str
     :param cookie_name: The name for the AuthTktCookiePlugin.
     :type cookie_name: str
+    :param login_url: The URL where the login form is displayed.
+    :type login_url: str
+    :param login_handler: The URL where the login form is submitted.
+    :type login_handler: str
+    :param logout_handler: The URL where the logout is handled.
+    :type login_handler: str
     :param translations: The model translations.
     :return: The WSGI application with authentication and authorization
         middleware.
@@ -168,9 +175,8 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     
     if form_plugin is None:
         from repoze.who.plugins.form import RedirectingFormPlugin
-        form = RedirectingFormPlugin('/login', '/login_handler',
-                                     '/logout_handler',
-                                     rememberer_name='cookie')
+        form = RedirectingFormPlugin(login_url, login_handler,
+                                     logout_handler, rememberer_name='cookie')
     else:
         form = form_plugin
     

@@ -78,3 +78,14 @@ class TestSetupAuth(BasePluginTester):
     def test_non_default_form_plugin(self):
         app = self._makeApp(form_plugin=BasicAuthPlugin('1+1=2'))
         self._in_registry(app, 'main_identifier', BasicAuthPlugin)
+
+    def test_custom_login_urls(self):
+        login_url = '/myapp/login'
+        login_handler = '/myapp/login_handler'
+        logout_handler = '/myapp/logout'
+        app = self._makeApp(login_url=login_url, login_handler=login_handler,
+                            logout_handler=logout_handler)
+        form = app.name_registry['form']
+        self.assertEqual(form.login_form_url, login_url)
+        self.assertEqual(form.login_handler_path, login_handler)
+        self.assertEqual(form.logout_handler_path, logout_handler)

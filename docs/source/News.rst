@@ -5,6 +5,16 @@
 This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 
+.. _repoze.what-sql-1.0a4:
+
+:mod:`repoze.what.plugins.sql` 1.0a4 (2009-01-02)
+=================================================
+
+* Added the ability to customize the login/logout related URLs through
+  :func:`repoze.what.plugins.quickstart.setup_sql_auth`
+  (`TurboGears Ticket #2114 <http://trac.turbogears.org/ticket/2114>`_).
+
+
 .. _repoze.what-sql-1.0a3:
 
 :mod:`repoze.what.plugins.sql` 1.0a3 (2008-12-19)
