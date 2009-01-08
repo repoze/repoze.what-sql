@@ -71,7 +71,8 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
                    dbsession, form_plugin=None, form_identifies=True,
                    cookie_secret='secret', cookie_name='authtkt',
                    login_url='/login', login_handler='/login_handler',
-                   logout_handler='/logout', translations={}, **who_args):
+                   logout_handler='/logout_handler', translations={}, 
+                   **who_args):
     """
     Configure :mod:`repoze.who` and :mod:`repoze.what` with SQL-only 
     authentication and authorization, respectively.
@@ -108,9 +109,9 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
         customize the cookie name and secret using the ``cookie_name`` and
         ``cookie_secret`` arguments, respectively.
       * :class:`repoze.who.plugins.form.RedirectingFormPlugin` as the first
-        identifier and challenger -- using ``/login`` as the relative URL that 
-        will \display the login form, ``/login_handler`` as the relative URL 
-        where the form will be sent and ``/logout_handler`` as the relative URL
+        identifier and challenger -- using ``login`` as the relative URL that 
+        will display the login form, ``login_handler`` as the relative URL 
+        where the form will be sent and ``logout_handler`` as the relative URL
         where the user will be logged out. The so-called *rememberer* of such 
         identifier will be an instance of 
         :class:`repoze.who.plugins.auth_tkt.AuthTktCookiePlugin`.

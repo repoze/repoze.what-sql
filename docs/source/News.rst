@@ -5,6 +5,16 @@
 This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 
+.. _repoze.what-sql-1.0a5:
+
+:mod:`repoze.what.plugins.sql` 1.0a5 (2009-01-08)
+=================================================
+
+* I replaced ``/logout_handler`` with ``/logout`` by mistake while making that
+  setting customizable in the previous release, which broke some applications.
+  That's now fixed (``/logout_handler`` is back).
+
+
 .. _repoze.what-sql-1.0a4:
 
 :mod:`repoze.what.plugins.sql` 1.0a4 (2009-01-02)
