@@ -36,36 +36,36 @@ def setup_database():
 
     see_site = Permission()
     see_site.permission_name = u'see-site'
-    DBSession.save(see_site)
+    DBSession.add(see_site)
 
     edit_site = Permission()
     edit_site.permission_name = u'edit-site'
-    DBSession.save(edit_site)
+    DBSession.add(edit_site)
 
     commit = Permission()
     commit.permission_name = u'commit'
-    DBSession.save(commit)
+    DBSession.add(commit)
 
     # Creating groups
 
     admins = Group(u'admins')
     admins.permissions.append(edit_site)
-    DBSession.save(admins)
+    DBSession.add(admins)
 
     developers = Group(u'developers')
     developers.permissions = [commit, edit_site]
-    DBSession.save(developers)
+    DBSession.add(developers)
 
     trolls = Group(u'trolls')
     trolls.permissions.append(see_site)
-    DBSession.save(trolls)
+    DBSession.add(trolls)
 
     # Plus a couple of groups with no permissions
     php = Group(u'php')
-    DBSession.save(php)
+    DBSession.add(php)
 
     python = Group(u'python')
-    DBSession.save(python)
+    DBSession.add(python)
 
     # Creating users
 
@@ -74,30 +74,30 @@ def setup_database():
     user.password = u'freedom'
     user.groups.append(admins)
     user.groups.append(developers)
-    DBSession.save(user)
+    DBSession.add(user)
 
     user = User()
     user.user_name = u'linus'
     user.password = u'linux'
     user.groups.append(developers)
-    DBSession.save(user)
+    DBSession.add(user)
 
     user = User()
     user.user_name = u'sballmer'
     user.password = u'developers'
     user.groups.append(trolls)
-    DBSession.save(user)
+    DBSession.add(user)
 
     # Plus a couple of users without groups
     user = User()
     user.user_name = u'guido'
     user.password = u'phytonic'
-    DBSession.save(user)
+    DBSession.add(user)
 
     user = User()
     user.user_name = u'rasmus'
     user.password = u'php'
-    DBSession.save(user)
+    DBSession.add(user)
 
     DBSession.commit()
 
