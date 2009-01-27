@@ -13,6 +13,7 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 * Synchronized to :mod:`repoze.what` v1.0.1 and its ``credentials`` dict.
 * Loaded the user object into the ``identity`` thanks to
   :class:`repoze.who.plugins.sa.SQLAlchemyUserMDPlugin`.
+* Many minor fixes.
 
 
 .. _repoze.what-sql-1.0a5:
