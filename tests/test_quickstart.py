@@ -18,7 +18,7 @@ Tests for the repoze.what SQL quickstart.
 
 """
 
-import unittest
+from unittest import TestCase
 
 from repoze.who.plugins.basicauth import BasicAuthPlugin
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
@@ -28,7 +28,8 @@ from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin, \
 from repoze.who.tests import Base as BasePluginTester, DummyApp
 
 from repoze.what.middleware import AuthorizationMetadata
-from repoze.what.plugins.quickstart import setup_sql_auth
+from repoze.what.plugins.quickstart import setup_sql_auth, \
+                                           find_plugin_translations
 
 import databasesetup
 from fixture.model import User, Group, Permission, DBSession
@@ -91,3 +92,49 @@ class TestSetupAuth(BasePluginTester):
         self.assertEqual(form.login_form_url, login_url)
         self.assertEqual(form.login_handler_path, login_handler)
         self.assertEqual(form.logout_handler_path, logout_handler)
+
+
+class TestPluginTranslationsFinder(TestCase):
+    
+    def test_it(self):
+        # --- Setting it up ---
+        translations = {
+            'validate_password': 'pass_checker',
+            'user_name': 'member_name',
+            'users': 'members',
+            'group_name': 'team_name',
+            'groups': 'teams',
+            'permission_name': 'perm_name',
+            'permissions': 'perms'
+            }
+        plugin_translations = find_plugin_translations(translations)
+        # --- Testing it ---
+        # Group translations
+        group_translations = {
+            'item_name': translations['user_name'],
+            'items': translations['users'],
+            'section_name': translations['group_name'],
+            'sections': translations['groups'],
+            }
+        self.assertEqual(group_translations, 
+                         plugin_translations['group_adapter'])
+        # Permission translations
+        perm_translations = {
+            'item_name': translations['group_name'],
+            'items': translations['groups'],
+            'section_name': translations['permission_name'],
+            'sections': translations['permissions'],
+            }
+        self.assertEqual(perm_translations, 
+                         plugin_translations['permission_adapter'])
+        # Authenticator translations
+        auth_translations = {
+            'user_name': translations['user_name'],
+            'validate_password': translations['validate_password'],
+            }
+        self.assertEqual(auth_translations, 
+                         plugin_translations['authenticator'])
+        # MD Provider translations
+        md_translations = {'user_name': translations['user_name']}
+        self.assertEqual(md_translations, 
+                         plugin_translations['mdprovider'])
