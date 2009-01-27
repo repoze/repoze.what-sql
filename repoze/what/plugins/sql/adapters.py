@@ -76,9 +76,9 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         """
         Create an SQL source adapter.
 
-        @param parent_class: The SQLAlchemy table of the section.
-        @param children_class: The SQLAlchemy table of the items.
-        @param dbsession: The SQLAlchemy session.
+        :param parent_class: The SQLAlchemy table of the section.
+        :param children_class: The SQLAlchemy table of the items.
+        :param dbsession: The SQLAlchemy session.
 
         """
         super(_BaseSqlAdapter, self).__init__()
@@ -189,7 +189,7 @@ class _BaseSqlAdapter(BaseSourceAdapter):
 
     def _get_section_as_row(self, section_name):
         """
-        Return the SQLAlchemy row for the section called C{section_name}.
+        Return the SQLAlchemy row for the section called ``section_name``.
 
         When dealing with a group source, the section is a group. And when
         dealing with a permission source, the section is a permission.
@@ -209,7 +209,7 @@ class _BaseSqlAdapter(BaseSourceAdapter):
 
     def _get_item_as_row(self, item_name):
         """
-        Return the SQLAlchemy row for the item called C{item_name}.
+        Return the SQLAlchemy row for the item called ``item_name``.
 
         When dealing with a group source, the item is a user. And when dealing
         with a permission source, the item is a group.
@@ -229,7 +229,7 @@ class _BaseSqlAdapter(BaseSourceAdapter):
 
     def _get_items_as_rowset(self, section_name):
         """
-        Return the items of the section called C{section_name}.
+        Return the items of the section called ``section_name``.
 
         When dealing with a group source, the section is a group and the
         items (the result of this function) are the users that belong to such
