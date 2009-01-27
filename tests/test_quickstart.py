@@ -23,7 +23,8 @@ import unittest
 from repoze.who.plugins.basicauth import BasicAuthPlugin
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
 from repoze.who.plugins.form import RedirectingFormPlugin
-from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
+from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin, \
+                                  SQLAlchemyUserMDPlugin
 from repoze.who.tests import Base as BasePluginTester, DummyApp
 
 from repoze.what.middleware import AuthorizationMetadata
@@ -61,6 +62,7 @@ class TestSetupAuth(BasePluginTester):
         app = self._makeApp()
         self._in_registry(app, 'main_identifier', RedirectingFormPlugin)
         self._in_registry(app, 'authorization_md', AuthorizationMetadata)
+        self._in_registry(app, 'sql_user_md', SQLAlchemyUserMDPlugin)
         self._in_registry(app, 'cookie', AuthTktCookiePlugin)
         self._in_registry(app, 'sqlauth', SQLAlchemyAuthenticatorPlugin)
         self._in_registry(app, 'form', RedirectingFormPlugin)

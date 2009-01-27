@@ -18,7 +18,8 @@
 """Sample plugins and middleware configuration for repoze.what."""
 
 from repoze.who.plugins.auth_tkt import AuthTktCookiePlugin
-from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin
+from repoze.who.plugins.sa import SQLAlchemyAuthenticatorPlugin, \
+                                  SQLAlchemyUserMDPlugin
 
 from repoze.what.middleware import setup_auth
 from repoze.what.plugins.sql import configure_sql_adapters
@@ -26,27 +27,30 @@ from repoze.what.plugins.sql import configure_sql_adapters
 
 def find_plugin_translations(translations={}):
     """
-    Process translations defined in TG2 quickstarted projects.
+    Process global translations for :mod:`repoze.who`/:mod:`repoze.what`
+    SQLAlchemy plugins.
     
     These "translations" are usually defined in quickstarted projects, in
     {tg2_project}.config.app_cfg.base_config.sa_auth.translations
     
-    @param translations: The TG2 applications' base_config.sa_auth.translations
-    @return: The respective translations for the group and permission adapters
-        and the authenticator.
-    @rtype: C{dict}
+    :param translations: The TG2 applications' base_config.sa_auth.translations
+    :return: The respective translations for the group and permission adapters,
+        the authenticator and the MD provider.
+    :rtype: C{dict}
     
     """
     
     group_adapter = {}
     permission_adapter = {}
     authenticator = {}
+    mdprovider = {}
     
     if 'validate_password' in translations:
         authenticator['validate_password'] = translations['validate_password']
     if 'user_name' in translations:
         group_adapter['item_name'] = translations['user_name']
         authenticator['user_name'] = translations['user_name']
+        mdprovider['user_name'] = translations['user_name']
     if 'users' in translations:
         group_adapter['items'] = translations['users']
     if 'group_name' in translations:
@@ -63,7 +67,8 @@ def find_plugin_translations(translations={}):
     final_translations = {
         'group_adapter': group_adapter,
         'permission_adapter': permission_adapter,
-        'authenticator': authenticator}
+        'authenticator': authenticator,
+        'mdprovider': mdprovider}
     return final_translations
 
 
@@ -140,7 +145,13 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
       Then it will append the challengers you pass through the 
       ``challengers`` keyword argument, if any.
     
-    * Metadata providers: The metadata providers you pass through the 
+    * Metadata providers:
+    
+      * :class:`repoze.who.plugins.sa.SQLAlchemyUserMDPlugin`, using
+        the ``user_class`` and ``dbsession`` arguments as its user class and
+        DB session, respectively.
+      
+      Then it will append the metadata providers you pass through the 
       ``mdproviders`` keyword argument, if any.
     
     Additional keyword arguments will be passed to 
@@ -188,6 +199,13 @@ def setup_sql_auth(app, user_class, group_class, permission_class,
     if 'challengers' not in who_args:
         who_args['challengers'] = []
     who_args['challengers'].append(('form', form))
+    
+    # Setting up the repoze.who mdproviders:
+    sql_user_md = SQLAlchemyUserMDPlugin(user_class, dbsession)
+    sql_user_md.translations.update(plugin_translations['mdprovider'])
+    if 'mdproviders' not in who_args:
+        who_args['mdproviders'] = []
+    who_args['mdproviders'].append(('sql_user_md', sql_user_md))
     
     middleware = setup_auth(app, group_adapters, permission_adapters, 
                             **who_args)
