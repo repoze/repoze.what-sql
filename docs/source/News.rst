@@ -5,6 +5,14 @@
 This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 
+.. _repoze.what-sql-1.0b1:
+
+:mod:`repoze.what.plugins.sql` 1.0b1 (2009-01-27)
+=================================================
+
+* Synchronized to :mod:`repoze.what` v1.0.1 and its ``credentials`` dict.
+
+
 .. _repoze.what-sql-1.0a5:
 
 :mod:`repoze.what.plugins.sql` 1.0a5 (2009-01-08)

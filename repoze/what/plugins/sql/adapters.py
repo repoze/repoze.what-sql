@@ -322,15 +322,12 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
             'items': 'users'
         }
 
-    def _find_sections(self, identity):
-        id_ = identity['repoze.who.userid']
+    def _find_sections(self, credentials):
+        id_ = credentials['repoze.what.userid']
         try:
             user = self._get_item_as_row(id_)
         except SourceError:
             return set()
-
-        # Also load the user object into the identity
-        identity['user'] = user
 
         user_memberships = getattr(user, self.translations['sections'])
         return set([getattr(group, self.translations['section_name'])
