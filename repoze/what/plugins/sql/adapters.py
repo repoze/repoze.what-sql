@@ -105,38 +105,25 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         items_as_rowset = getattr(section_as_row, self.translations['items'])
         return set((getattr(i, item_name) for i in items_as_rowset))
 
-    # BaseSourceAdapter
-    def _find_sections(self, hint):
-        raise NotImplementedError('This is implemented in the groups and '
-                                  'permissions adapters.')
-
     # TODO: Factor out the common code in _include_items and _exclude_items
 
     # BaseSourceAdapter
     def _include_items(self, section, items):
         self.dbsession.begin(subtransactions=True)
         item, included_items = self._get_items_as_rowset(section)
-        try:
-            for item_to_include in items:
-                item_as_row = self._get_item_as_row(item_to_include)
-                included_items.append(item_as_row)
-            self.dbsession.commit()
-        except SQLAlchemyError, msg:
-            self.dbsession.rollback()
-            raise SourceError(msg)
+        for item_to_include in items:
+            item_as_row = self._get_item_as_row(item_to_include)
+            included_items.append(item_as_row)
+        self.dbsession.commit()
 
     # BaseSourceAdapter
     def _exclude_items(self, section, items):
         self.dbsession.begin(subtransactions=True)
         item, included_items = self._get_items_as_rowset(section)
-        try:
-            for item_to_exclude in items:
-                item_as_row = self._get_item_as_row(item_to_exclude)
-                included_items.remove(item_as_row)
-            self.dbsession.commit()
-        except SQLAlchemyError, msg:
-            self.dbsession.rollback()
-            raise SourceError(msg)
+        for item_to_exclude in items:
+            item_as_row = self._get_item_as_row(item_to_exclude)
+            included_items.remove(item_as_row)
+        self.dbsession.commit()
 
     # BaseSourceAdapter
     def _item_is_included(self, section, item):
@@ -149,34 +136,22 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         # Creating the section with an empty set of items:
         setattr(section_as_row, self.translations['section_name'], section)
         setattr(section_as_row, self.translations['items'], [])
-        try:
-            self.dbsession.add(section_as_row)
-            self.dbsession.commit()
-        except SQLAlchemyError, msg:
-            self.dbsession.rollback()
-            raise SourceError(msg)
+        self.dbsession.add(section_as_row)
+        self.dbsession.commit()
 
     # BaseSourceAdapter
     def _edit_section(self, section, new_section):
         self.dbsession.begin(subtransactions=True)
         section_as_row = self._get_section_as_row(section)
         setattr(section_as_row, self.translations['section_name'], new_section)
-        try:
-            self.dbsession.commit()
-        except SQLAlchemyError, msg:
-            self.dbsession.rollback()
-            raise SourceError(msg)
+        self.dbsession.commit()
 
     # BaseSourceAdapter
     def _delete_section(self, section):
         self.dbsession.begin(subtransactions=True)
         section_as_row = self._get_section_as_row(section)
-        try:
-            self.dbsession.delete(section_as_row)
-            self.dbsession.commit()
-        except SQLAlchemyError, msg:
-            self.dbsession.rollback()
-            raise SourceError(msg)
+        self.dbsession.delete(section_as_row)
+        self.dbsession.commit()
 
     # BaseSourceAdapter
     def _section_exists(self, section):
@@ -322,6 +297,7 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
             'items': 'users'
         }
 
+    # BaseSourceAdapter
     def _find_sections(self, credentials):
         id_ = credentials['repoze.what.userid']
         try:
@@ -412,6 +388,7 @@ class SqlPermissionsAdapter(_BaseSqlAdapter):
             'items': 'groups'
         }
 
+    # BaseSourceAdapter
     def _find_sections(self, group_name):
         try:
             group = self._get_item_as_row(group_name)
