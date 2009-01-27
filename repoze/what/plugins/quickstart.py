@@ -33,10 +33,11 @@ def find_plugin_translations(translations={}):
     These "translations" are usually defined in quickstarted projects, in
     {tg2_project}.config.app_cfg.base_config.sa_auth.translations
     
-    :param translations: The TG2 applications' base_config.sa_auth.translations
+    :param translations: The translation dictionary.
+    :type translations: dict
     :return: The respective translations for the group and permission adapters,
         the authenticator and the MD provider.
-    :rtype: C{dict}
+    :rtype: dict
     
     """
     
