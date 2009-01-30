@@ -40,7 +40,7 @@ install it all with ``easy_install``::
 
 The development mainline is available at the following Subversion repository::
 
-    http://svn.repoze.org/repoze.what/plugins/sql/
+    http://svn.repoze.org/repoze.what/plugins/sql/trunk/
 
 
 How to get help?
