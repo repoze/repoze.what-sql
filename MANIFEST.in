@@ -1,0 +1,13 @@
+include README.txt
+include VERSION.txt
+include MANIFEST.in
+
+recursive-include docs *
+prune docs/build
+
+recursive-include repoze *
+
+recursive-exclude tests *
+recursive-exclude test_elixir *
+
+global-exclude *~ *.pyc *.egg .directory
