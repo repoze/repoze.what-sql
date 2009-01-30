@@ -5,9 +5,9 @@
 This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 
-.. _repoze.what-sql-1.0b2:
+.. _repoze.what-sql-1.0rc1:
 
-:mod:`repoze.what.plugins.sql` 1.0b2 (2009-01-30)
+:mod:`repoze.what.plugins.sql` 1.0rc1 (2009-01-30)
 =================================================
 
 * Moved :mod:`repoze.what.plugins.quickstart` into an independent project.
