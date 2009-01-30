@@ -109,3 +109,12 @@ dictionary used above:
       and ``Group.permissions``.
     * ``validate_password``: The translation for the method in
       ``User.validate_password``.
+
+
+:mod:`repoze.who` plugins
+-------------------------
+
+This plugin defines the following :mod:`repoze.who` plugins:
+
+.. autoclass:: FriendlyRedirectingFormPlugin
+    :members: __init__
