@@ -38,6 +38,10 @@ install it all with ``easy_install``::
     
         easy_install repoze.what.plugins.sql
 
+The development mainline is available at the following Subversion repository::
+
+    http://svn.repoze.org/repoze.what/plugins/sql/
+
 
 How to get help?
 ================
