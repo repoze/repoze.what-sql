@@ -23,8 +23,6 @@ The :mod:`repoze.what` SQL plugin
     relationship). They are all defined in the :mod:`repoze.what.plugins.sql` 
     module.
     
-    This plugin also defines :mod:`repoze.what.plugins.quickstart`.
-    
     .. warning::
     
         Only SQLAlchemy is intended to be supported. Elixir
@@ -35,8 +33,8 @@ The :mod:`repoze.what` SQL plugin
 How to install
 ==============
 
-The minimum requirements are SQLAlchemy, :mod:`repoze.who.plugins.sa`
-and :mod:`repoze.what`, and you can install it all with ``easy_install``::
+The minimum requirements are SQLAlchemy, and :mod:`repoze.what`, and you can 
+install it all with ``easy_install``::
     
         easy_install repoze.what.plugins.sql
 
@@ -57,7 +55,6 @@ Contents
     :maxdepth: 2
 
     Adapters
-    Quickstart
     News
 
 

@@ -190,4 +190,5 @@ intersphinx_mapping = {
     'http://static.repoze.org/whatdocs/': None,
     'http://static.repoze.org/whodocs/': None,
     'http://code.gustavonarea.net/repoze.who.plugins.sa/': None,
+    'http://code.gustavonarea.net/repoze.what-quickstart/': None,
     }

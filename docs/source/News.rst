@@ -7,12 +7,10 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 .. _repoze.what-sql-1.0b2:
 
-:mod:`repoze.what.plugins.sql` 1.0b2 (*unreleased*)
-===================================================
+:mod:`repoze.what.plugins.sql` 1.0b2 (2009-01-30)
+=================================================
 
-* Introduced the plugin :class:`FriendlyRedirectingFormPlugin
-  <repoze.what.plugins.quickstart.FriendlyRedirectingFormPlugin>` and used by
-  default in :func:`repoze.what.plugins.quickstart.setup_sql_auth`.
+* Moved :mod:`repoze.what.plugins.quickstart` into an independent project.
 
 
 .. _repoze.what-sql-1.0b1:
