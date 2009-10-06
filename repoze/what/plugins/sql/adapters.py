@@ -308,8 +308,6 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
             except SourceError:
                 return set()
             credentials['repoze.what.userobj'] = user
-            print '*'*80
-            print credentials
 
         return set([getattr(group, self.translations['section_name'])
                     for group in user.groups])
