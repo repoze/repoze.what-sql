@@ -62,6 +62,7 @@ field and table names involved:
 
 from sqlalchemy.exceptions import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import eagerload
 
 from repoze.what.adapters import BaseSourceAdapter, SourceError
 
@@ -193,7 +194,7 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         # "field" usually equals to {tg_package}.model.User.user_name
         # or {tg_package}.model.Group.group_name
         field = getattr(self.children_class, self.translations['item_name'])
-        query = self.dbsession.query(self.children_class)
+        query = self.dbsession.query(self.children_class).options(eagerload(self.translations['sections']))
         try:
             item_as_row = query.filter(field==item_name).one()
         except NoResultFound:
@@ -300,14 +301,18 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
     # BaseSourceAdapter
     def _find_sections(self, credentials):
         id_ = credentials['repoze.what.userid']
-        try:
-            user = self._get_item_as_row(id_)
-        except SourceError:
-            return set()
+        user = credentials.get('repoze.what.userobj', None)
+        if user is None:
+            try:
+                user = self._get_item_as_row(id_)
+            except SourceError:
+                return set()
+            credentials['repoze.what.userobj'] = user
+            print '*'*80
+            print credentials
 
-        user_memberships = getattr(user, self.translations['sections'])
         return set([getattr(group, self.translations['section_name'])
-                    for group in user_memberships])
+                    for group in user.groups])
 
 
 class SqlPermissionsAdapter(_BaseSqlAdapter):
@@ -436,14 +441,15 @@ def configure_sql_adapters(user_class, group_class, permission_class, session,
         # ...
 
     """
-    # Creating the adapters:
-    group = SqlGroupsAdapter(group_class, user_class, session)
-    permission = SqlPermissionsAdapter(permission_class, group_class, session)
-    # Translating some fields:
-    group.translations.update(group_translations)
-    permission.translations.update(permission_translations)
-
-    return {'group': group, 'permission': permission}
-
+    r = {}
+    if group_class is not None:
+        group = SqlGroupsAdapter(group_class, user_class, session)
+        group.translations.update(group_translations)
+        r['group'] = group
+    if permission_class is not None:
+        permission = SqlPermissionsAdapter(permission_class, group_class, session)
+        permission.translations.update(permission_translations)
+        r['permission'] = permission
+    return r
 
 #}
