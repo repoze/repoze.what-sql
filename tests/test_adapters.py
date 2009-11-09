@@ -23,7 +23,9 @@ from repoze.what.adapters.testutil import GroupsAdapterTester, \
                                           PermissionsAdapterTester
 
 import databasesetup
+import databasesetup_translations
 from fixture.model import User, Group, Permission, DBSession
+from fixture.model_translations import Member, Team, Right, DBSession
 
 
 class _BaseSqlAdapterTester(unittest.TestCase):
@@ -54,6 +56,44 @@ class TestSqlPermissionsAdapter(PermissionsAdapterTester,
         self.adapter = SqlPermissionsAdapter(databasesetup.Permission,
                                              databasesetup.Group,
                                              databasesetup.DBSession)
+
+
+class TestSqlGroupsAdapterWithTranslations(GroupsAdapterTester,
+                                           _BaseSqlAdapterTester):
+    """Test suite for the SQL group source adapter with translations"""
+    
+    def setUp(self):
+        super(TestSqlGroupsAdapterWithTranslations, self).setUp()
+        databasesetup_translations.setup_database()
+        self.adapter = SqlGroupsAdapter(
+            Team,
+            Member,
+            databasesetup_translations.DBSession)
+        translations = {
+            'item_name': 'member_name',
+            'items': 'members',
+            'section_name': 'team_name',
+            'sections': 'teams'}
+        self.adapter.translations.update(translations)
+
+
+class TestSqlPermissionsAdapterWithTranslations(PermissionsAdapterTester,
+                                                _BaseSqlAdapterTester):
+    """Test suite for the SQL permission source adapter with translations"""
+    
+    def setUp(self):
+        super(TestSqlPermissionsAdapterWithTranslations, self).setUp()
+        databasesetup_translations.setup_database()
+        self.adapter = SqlPermissionsAdapter(
+            Right,
+            Team,
+            databasesetup_translations.DBSession)
+        translations = {
+            'item_name': 'team_name',
+            'items': 'teams',
+            'section_name': 'right_name',
+            'sections': 'rights'}
+        self.adapter.translations.update(translations)
 
 
 class TestAdaptersConfigurator(unittest.TestCase):

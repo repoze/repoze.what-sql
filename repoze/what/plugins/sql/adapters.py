@@ -308,9 +308,10 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
             except SourceError:
                 return set()
             credentials['repoze.what.userobj'] = user
-
+        
+        user_memberships = getattr(user, self.translations['sections'])
         return set([getattr(group, self.translations['section_name'])
-                    for group in user.groups])
+                    for group in user_memberships])
 
 
 class SqlPermissionsAdapter(_BaseSqlAdapter):
