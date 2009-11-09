@@ -16,14 +16,11 @@
 """Mock SQLAlchemy-powered model definition."""
 
 from hashlib import sha1
-from datetime import datetime
 
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.types import String, Unicode, UnicodeText, Integer, DateTime, \
-                             Boolean, Float
-from sqlalchemy.orm import scoped_session, sessionmaker, relation, backref, \
-                           synonym
+from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.orm import scoped_session, sessionmaker, relation, synonym
 
 
 DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
