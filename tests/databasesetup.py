@@ -19,7 +19,6 @@ import os
 
 from sqlalchemy import *
 from sqlalchemy.orm import *
-from cStringIO import StringIO
 from cgi import FieldStorage
 
 from fixture.model import init_model, DBSession, metadata, Permission, \
