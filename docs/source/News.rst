@@ -5,18 +5,20 @@
 This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 
-.. _repoze.what-sql-1.0rc1:
+Version 1.0 Final (2010-03-11)
+==============================
 
-:mod:`repoze.what.plugins.sql` 1.0rc1 (2009-01-30)
-=================================================
+Removed the test suite and the documentation from the final distribution.
+
+
+Version 1.0rc1 (2009-01-30)
+===========================
 
 * Moved :mod:`repoze.what.plugins.quickstart` into an independent project.
 
 
-.. _repoze.what-sql-1.0b1:
-
-:mod:`repoze.what.plugins.sql` 1.0b1 (2009-01-27)
-=================================================
+Version 1.0b1 (2009-01-27)
+==========================
 
 * Synchronized to :mod:`repoze.what` v1.0.1 and its ``credentials`` dict.
 * Loaded the user object into the ``identity`` thanks to
@@ -24,30 +26,24 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 * Many minor fixes.
 
 
-.. _repoze.what-sql-1.0a5:
-
-:mod:`repoze.what.plugins.sql` 1.0a5 (2009-01-08)
-=================================================
+Version 1.0a5 (2009-01-08)
+==========================
 
 * I replaced ``/logout_handler`` with ``/logout`` by mistake while making that
   setting customizable in the previous release, which broke some applications.
   That's now fixed (``/logout_handler`` is back).
 
 
-.. _repoze.what-sql-1.0a4:
-
-:mod:`repoze.what.plugins.sql` 1.0a4 (2009-01-02)
-=================================================
+Version 1.0a4 (2009-01-02)
+==========================
 
 * Added the ability to customize the login/logout related URLs through
   :func:`repoze.what.plugins.quickstart.setup_sql_auth`
   (`TurboGears Ticket #2114 <http://trac.turbogears.org/ticket/2114>`_).
 
 
-.. _repoze.what-sql-1.0a3:
-
-:mod:`repoze.what.plugins.sql` 1.0a3 (2008-12-19)
-=================================================
+Version 1.0a3 (2008-12-19)
+==========================
 
 * Moved the :class:`repoze.what.plugins.quickstart.SQLAuthenticatorPlugin`
   authenticator into a new, :mod:`repoze.what`-independent project:
@@ -59,10 +55,8 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
   http://code.gustavonarea.net/repoze.what.plugins.sql/
 
 
-.. _repoze.what-sql-1.0a2:
-
-:mod:`repoze.what.plugins.sql` 1.0a2 (2008-12-04)
-=================================================
+Version 1.0a2 (2008-12-04)
+==========================
 
 * Fixed the broken test suite for Elixir, thanks to Helio Pereira.
 * Updated :func:`repoze.what.plugins.quickstart.setup_sql_auth` according
