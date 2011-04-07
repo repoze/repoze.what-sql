@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-# Copyright (c) 2008-2009, Gustavo Narea <me@gustavonarea.net>.
+# Copyright (c) 2008-2011, Gustavo Narea <me@gustavonarea.net>.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the BSD-like license at
@@ -59,8 +59,10 @@ field and table names involved:
     used object into repoze.who's identity dict (under the "user" key).
 
 """
-
-from sqlalchemy.exceptions import SQLAlchemyError
+try:
+    from sqlalchemy.exceptions import SQLAlchemyError
+except ImportError:
+    from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import eagerload
 

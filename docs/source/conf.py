@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = u'repoze.what SQL plugin'
-copyright = u'2008, The Repoze Project'
+copyright = u'2008-2011, The Repoze Project'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
