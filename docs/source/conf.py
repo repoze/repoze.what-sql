@@ -187,8 +187,9 @@ latex_documents = [
 #latex_use_modindex = True
 
 intersphinx_mapping = {
-    'http://static.repoze.org/whatdocs/': None,
-    'http://static.repoze.org/whodocs/': None,
+    'http://what.repoze.org/docs/1.0/': None,
+    'http://docs.repoze.org/who/1.0/': None,
     'http://code.gustavonarea.net/repoze.who.plugins.sa/': None,
-    'http://code.gustavonarea.net/repoze.what-quickstart/': None,
+    'http://what.repoze.org/docs/plugins/quickstart/': None,
+    'http://docs.python.org/': None,
     }
