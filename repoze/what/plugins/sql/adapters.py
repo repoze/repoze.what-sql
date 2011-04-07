@@ -59,9 +59,9 @@ field and table names involved:
     used object into repoze.who's identity dict (under the "user" key).
 
 """
-try:
-    from sqlalchemy.exceptions import SQLAlchemyError
-except ImportError:
+try: #pragma:no cover
+    from sqlalchemy.exceptions import SQLAlchemyError, InvalidRequestError
+except ImportError: #pragma:no cover
     from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import eagerload
@@ -196,7 +196,15 @@ class _BaseSqlAdapter(BaseSourceAdapter):
         # "field" usually equals to {tg_package}.model.User.user_name
         # or {tg_package}.model.Group.group_name
         field = getattr(self.children_class, self.translations['item_name'])
-        query = self.dbsession.query(self.children_class).options(eagerload(self.translations['sections']))
+        
+        # Eagerload the sections, unless they are dynamically computed by a
+        # property on the "self.children_class":
+        query = self.dbsession.query(self.children_class)
+        try:
+            query = query.options(eagerload(self.translations['sections']))
+        except InvalidRequestError:
+            pass
+        
         try:
             item_as_row = query.filter(field==item_name).one()
         except NoResultFound:
@@ -278,6 +286,13 @@ class SqlGroupsAdapter(_BaseSqlAdapter):
         groups.translations['sections'] = 'teams'
         
         # ...
+    
+    .. versionchanged:: 1.0.1
+        The groups to which a user belongs can be set dynamically by using
+        a property called "groups" on ``user_class``. The result must be
+        a :class:`set` made up of ``group_class_`` instances. To use a different
+        property name, you'd also need to set the translation for "sections"
+        (see above).
     
     """
 
@@ -369,6 +384,12 @@ class SqlPermissionsAdapter(_BaseSqlAdapter):
         
         # ...
     
+    .. versionchanged:: 1.0.1
+        The permissions granted to a group can be set dynamically by using
+        a property called "permissions" on ``group_class``. The result must be
+        a :class:`set` made up of ``permission_class_`` instances. To use a
+        different property name, you'd also need to set the translation for
+        "sections" (see above).
     
     """
 

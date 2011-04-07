@@ -44,7 +44,21 @@ class TestSqlGroupsAdapter(GroupsAdapterTester, _BaseSqlAdapterTester):
         self.adapter = SqlGroupsAdapter(databasesetup.Group,
                                         databasesetup.User,
                                         databasesetup.DBSession)
-
+        # The members of "nogroup" are determined dynamically via a property
+        # on the user object:
+        self.all_sections['nogroup'] = set()
+    
+    def test_property(self):
+        """
+        The attribute containing the groups may be a property instead of a
+        relationship.
+        
+        """
+        self.adapter.translations['sections'] = "fake_groups"
+        
+        groups = self.adapter.find_sections({'repoze.what.userid': "linus"})
+        assert len(groups) == 1
+        assert groups == set(["nogroup"])
 
 class TestSqlPermissionsAdapter(PermissionsAdapterTester,
                                 _BaseSqlAdapterTester):
@@ -56,6 +70,18 @@ class TestSqlPermissionsAdapter(PermissionsAdapterTester,
         self.adapter = SqlPermissionsAdapter(databasesetup.Permission,
                                              databasesetup.Group,
                                              databasesetup.DBSession)
+        # The members of "nopermissions" are determined dynamically via a
+        # property on the group object:
+        self.all_sections['nopermission'] = set()
+    
+    def test_property(self):
+        """
+        The attribute containing the permissions may be a property instead of a
+        relationship.
+        
+        """
+        self.adapter.translations['sections'] = "fake_permissions"
+        assert self.adapter.find_sections("trolls") == set(["nopermission"])
 
 
 class TestSqlGroupsAdapterWithTranslations(GroupsAdapterTester,

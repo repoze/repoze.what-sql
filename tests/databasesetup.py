@@ -45,6 +45,10 @@ def setup_database():
     commit.permission_name = u'commit'
     DBSession.add(commit)
 
+    nopermission = Permission()
+    nopermission.permission_name = u'nopermission'
+    DBSession.add(nopermission)
+
     # Creating groups
 
     admins = Group(u'admins')
@@ -65,6 +69,9 @@ def setup_database():
 
     python = Group(u'python')
     DBSession.add(python)
+
+    nogroup = Group(u'nogroup')
+    DBSession.add(nogroup)
 
     # Creating users
 

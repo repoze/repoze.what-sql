@@ -8,8 +8,13 @@ This document describes the releases of :mod:`repoze.what.plugins.sql`.
 Unreleased
 ==========
 
-Made compatible with SQLAlchemy 0.7b2, by replacing import from
-:mod:`sqlalchemy.exceptions` with :mod:`sqlalchemy.exc`.
+* Made compatible with SQLAlchemy 0.7b2, by replacing import from
+  :mod:`sqlalchemy.exceptions` with :mod:`sqlalchemy.exc`.
+* Made it possible to set dynamically the groups to which a user belongs and
+  the permissions granted to a group, by allowing the user class to have
+  "groups" as a property (rather than a SQLAlchemy relationship) and the group
+  class to have "permissions" as a property (rather than a SQLAlchemy
+  relationships). Thanks to Nicolas Laurance!
 
 
 Version 1.0 Final (2010-03-11)

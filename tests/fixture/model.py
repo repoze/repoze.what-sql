@@ -72,6 +72,20 @@ class Group(DeclarativeBase):
 
     def __repr__(self):
         return '<Group: name=%s>' % self.group_name
+    
+    @property
+    def fake_permissions(self):
+        """
+        Return a fixed set of fake permissions.
+        
+        This is used to test that the permissions granted to a group can be
+        computed by a property on the group object.
+        
+        """
+        nopermission = DBSession.query(Permission).filter(
+            Permission.permission_name=="nopermission",
+            ).one()
+        return set([nopermission])
 
 
 class User(DeclarativeBase):
@@ -127,6 +141,20 @@ class User(DeclarativeBase):
         @type password: unicode object
         """
         return self.password == self.__encrypt_password(password)
+    
+    @property
+    def fake_groups(self):
+        """
+        Return a fixed set of fake groups.
+        
+        This is used to test that the groups to which a user belongs can be
+        computed by a property on the user object.
+        
+        """
+        nogroup = DBSession.query(Group).filter(Group.group_name=="nogroup") \
+            .one()
+        
+        return set([nogroup])
 
 
 class Permission(DeclarativeBase):
