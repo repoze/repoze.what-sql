@@ -5,8 +5,8 @@
 This document describes the releases of :mod:`repoze.what.plugins.sql`.
 
 
-Unreleased
-==========
+Version 1.0.1 (2011-04-07)
+==========================
 
 * Made compatible with SQLAlchemy 0.7b2, by replacing import from
   :mod:`sqlalchemy.exceptions` with :mod:`sqlalchemy.exc`.
